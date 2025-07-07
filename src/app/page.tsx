@@ -7,6 +7,7 @@ import { faq } from "@/data/accordianFAQ";
 import { FaChevronDown } from "react-icons/fa";
 import {Collapse} from 'react-collapse';
 import { useState } from "react";
+import Link from "next/link";
 
 function page() {
 
@@ -59,7 +60,7 @@ function page() {
                   <div className={`w-full rounded-xl h-20 md:h-28 flex justify-start items-center px-4 bg-gradient-to-r from-[#FFAA00] to-[#9D7800]`}>
                       <h1 className={`font-Kanit font-semibold text-3xl lg:text-5xl text-white flex justify-center items-center gap-3 lg:gap-6`}>I want to buy <IoBagCheck  className="text-xl lg:text-3xl"/></h1>
                   </div>
-                  <p className={`w-full cursor-pointer text-start text-white font-Kanit text-sm sm:text-lg lg:text-xl py-4 px-2 flex justify-start items-center gap-2 hover:gap-7 duration-200 ease-in-out`}>Continue as customer <MdOutlineKeyboardDoubleArrowRight className="text-lg lg:text-2xl"/></p>
+                  <Link href='/customer/auth' className={`w-full cursor-pointer text-start text-white font-Kanit text-sm sm:text-lg lg:text-xl py-4 px-2 flex justify-start items-center gap-2 hover:gap-7 duration-200 ease-in-out`}>Continue as customer <MdOutlineKeyboardDoubleArrowRight className="text-lg lg:text-2xl"/></Link>
               </div>
           </div>
         </div>
