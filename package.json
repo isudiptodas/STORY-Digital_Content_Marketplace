@@ -1,0 +1,33 @@
+{
+  "name": "story",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "bcrypt": "^6.0.0",
+    "gsap": "^3.13.0",
+    "jose": "^6.0.11",
+    "jsonwebtoken": "^9.0.2",
+    "next": "15.3.5",
+    "react": "^19.0.0",
+    "react-collapse": "^5.1.1",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "sonner": "^2.0.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-collapse": "^5.0.4",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
