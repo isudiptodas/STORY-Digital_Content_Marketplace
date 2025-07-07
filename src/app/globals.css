@@ -14,3 +14,11 @@
 .ReactCollapse--collapse {
   transition: height 500ms;
 }
+
+html, .sidebar, .content{
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar{
+  display: none;
+}
