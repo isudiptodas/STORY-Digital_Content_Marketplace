@@ -2,7 +2,7 @@ export const contentCategory = [
     'email templates',
     'ebooks',
     'poster designs',
-    'canva template',
+    'canva templates',
     'business card designs',
     'case studies',
     'graphics',
