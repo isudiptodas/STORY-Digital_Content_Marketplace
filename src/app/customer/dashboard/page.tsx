@@ -12,6 +12,7 @@ import { productList } from "@/data/fakeProduct";
 import { FaHeart } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
+import { toast } from "sonner";
 
 interface productProp {
     id: number,
@@ -31,6 +32,7 @@ function page() {
     const [filterVisible, setFilterVisible] = useState(false);
     const [searchVisible, setSearchVisible] = useState(false);
     const [option, setOption] = useState<null | string>(null);
+    const [searchInput, setSearchInput] = useState<null | string>(null);
     const [allProducts, setAllProducts] = useState<productProp[] | []>(productList);
     const [filterOption, setFilterOption] = useState('');
     const router = useRouter();
@@ -100,6 +102,36 @@ function page() {
         sortFilter();
     }, [filterOption]);
 
+    useEffect(() => {
+        const categoryFilter = () => {
+            if (option !== null) {
+                const filtered = productList.filter((data) => {
+                    return data.category === option
+                });
+
+                setAllProducts(filtered);
+            }
+            else {
+                setAllProducts(productList);
+            }
+        }
+
+        categoryFilter();
+    }, [option]);
+
+    const search = () => {
+        if (!searchInput) {
+            toast.error("Please enter search input");
+            return;
+        }
+
+        const filtered = productList.filter((data) => {
+            return data.name.toLowerCase().includes(searchInput.toLowerCase())
+        });
+
+        setAllProducts(filtered);
+    }
+
     return (
         <>
             <div className={`w-full h-auto flex flex-col justify-start items-center relative overflow-hidden`}>
@@ -108,8 +140,8 @@ function page() {
                 <div className={`w-full md:mt-4 h-auto px-4 flex justify-between items-center gap-3 py-5 relative`}>
                     <p onClick={() => setSearchVisible(!searchVisible)} className={`w-full md:hidden flex justify-center items-center gap-2 px-4 py-2 rounded-full bg-black text-white font-Kanit font-light cursor-pointer`}>Search <IoMdSearch /></p>
                     <div className={`w-full hidden md:flex justify-center items-center relative`}>
-                        <input type="text" className={`w-full py-3 px-5 pr-10 rounded-full bg-gray-200 text-black placeholder-zinc-400 font-Kanit outline-none`} placeholder={placeholders[index]} />
-                        <span className={`absolute top-1/2 -translate-y-1/2 right-2 px-4 py-1 rounded-full bg-blue-600 text-white cursor-pointer flex justify-center items-center gap-2`}>Search <IoMdSearch /></span>
+                        <input onChange={(e) => setSearchInput(e.target.value)} type="text" className={`w-full py-3 px-5 pr-10 rounded-full bg-gray-200 text-black placeholder-zinc-400 font-Kanit outline-none`} placeholder={placeholders[index]} />
+                        <span className={`absolute top-1/2 -translate-y-1/2 right-2 px-4 py-1 rounded-full bg-blue-600 text-white cursor-pointer flex justify-center items-center gap-2`} onClick={search}>Search <IoMdSearch /></span>
                     </div>
                     <p className={`w-full md:w-[20%] flex justify-center items-center gap-2 px-4 py-2 md:py-3 rounded-full bg-black text-white font-Kanit font-light cursor-pointer`}>Cart <FaShoppingCart /></p>
                     <p onClick={() => setFilterVisible(!filterVisible)} className={`w-full active:scale-95 duration-150 ease-in-out md:w-[20%] flex justify-center items-center gap-2 px-4 py-2 md:py-3 rounded-full bg-black text-white font-Kanit font-light cursor-pointer capitalize`}>Filter <ImFilter /></p>
@@ -123,13 +155,30 @@ function page() {
                 </div>
 
                 {/* mobile search */}
-                <div className={`w-full md:hidden ${searchVisible ? "opacity-100 scale-100" : "opacity-0 scale-0"} px-5 duration-200 ease-in-out transition-all h-screen backdrop-blur-3xl bg-black/60 flex flex-col justify-start items-center pt-20 fixed z-60`}>
+                <div className={`w-full md:hidden ${searchVisible ? "opacity-100 scale-100" : "opacity-0 scale-0"} px-5 duration-200 ease-in-out transition-all h-screen backdrop-blur-3xl bg-black/60 flex flex-col justify-start items-center pt-20 fixed z-[60] overflow-y-auto`}>
 
                     <span onClick={() => setSearchVisible(!searchVisible)} className={`absolute top-5 right-5 text-white text-xl cursor-pointer`}><MdCloseFullscreen /></span>
 
-                    <div className={`w-full rounded-lg flex flex-col justify-start items-center py-4 px-3`}>
-                        <input type="text" placeholder="Enter search term" className={`w-full rounded-full py-3 px-3 outline-none font-Kanit bg-gray-200 placeholder-gray-400 text-black`} />
-                        <p className={`w-full py-2 text-center text-white mt-3 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex justify-center items-center gap-3 cursor-pointer`}>Search <IoMdSearch /></p>
+                    <div className={`w-full rounded-lg flex flex-col justify-start items-center py-4 h-full px-3`}>
+                        <input onChange={(e) => setSearchInput(e.target.value)} type="text" placeholder="Enter search term" className={`w-full rounded-full py-3 px-3 outline-none font-Kanit bg-gray-200 placeholder-gray-400 text-black`} />
+                        <p className={`w-full py-2 text-center text-white mt-3 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex justify-center items-center gap-3 cursor-pointer`} onClick={search}>Search <IoMdSearch /></p>
+
+                        <div className={`w-full h-full pb-10 mt-5 overflow-y-auto flex flex-col gap-4 py-3`}>
+                            {allProducts.length > 0 && allProducts.map((prod, index) => {
+                                return <div key={index} className={`w-full cursor-pointer rounded-lg lg:rounded-xl h-44 shrink-0 bg-gray-200 overflow-hidden relative z-20`} onClick={() => navigate(prod.id.toString())}>
+                                    <img src={prod.img} className={`h-full w-full object-cover`} />
+                                    <div className={`w-full absolute z-20 bottom-0 bg-gradient-to-t from-black to-transparent h-[60%]`}></div>
+                                    <div className={`z-20 w-full h-auto absolute bottom-2 py-2 px-3 flex flex-col justify-start items-start`}>
+                                        <p className={`w-full text-white font-Kanit text-lg font-semibold`}>{prod.price.toLocaleString('en-IN', {
+                                            style: 'currency',
+                                            currency: 'INR'
+                                        })}</p>
+                                        <p className={`w-full text-white font-Kanit text-lg`}>{prod.name}</p>
+                                        <p className={`w-full text-white font-light font-Kanit text-[10px] flex justify-start items-center gap-2`}><FaStar className={`text-yellow-400`} />{prod.rating} ({prod.reviews}) reviews</p>
+                                    </div>
+                                </div>
+                            })}
+                        </div>
                     </div>
                 </div>
 
@@ -138,10 +187,7 @@ function page() {
 
                     <div className="overflow-x-auto flex justify-start items-start gap-3 md:gap-5 pr-4 scroll-smooth">
                         {contentCategory.map((content, index) => (
-                            <div
-                                key={index}
-                                className="w-auto capitalize cursor-pointer shrink-0 font-Kanit px-3 py-2 rounded-lg bg-gray-200 hover:bg-black hover:text-white duration-200 ease-in-out text-black text-sm md:text-lg"
-                            >
+                            <div key={index} className="w-auto capitalize cursor-pointer shrink-0 font-Kanit px-3 py-2 rounded-lg bg-gray-200 hover:bg-black hover:text-white duration-200 ease-in-out text-black text-sm md:text-lg" onClick={() => setOption(content)}>
                                 {content}
                             </div>
                         ))}
