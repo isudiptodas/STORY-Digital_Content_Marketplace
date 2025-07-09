@@ -44,7 +44,7 @@ function page() {
                 <h1 className={`font-Koulen text-white font-bold text-6xl md:text-7xl lg:text-8xl xl:text-[100px]`}>MARKETPLACE</h1>
               </div>
               <h1 className={`font-Kanit text-white text-lg md:text-xl lg:text-2xl text-center`}>Bring the most out of your digital content</h1>
-              <p className={`group px-8 relative py-3 flex justify-center items-center gap-2 rounded-full bg-white my-2 cursor-pointer`}><span className={` font-bold font-Kanit bg-gradient-to-br from-[#e750cb] to-[#2ebde1] bg-clip-text text-transparent`}>EXPLORE</span><span><IoIosRocket className="absolute top-1/2 -translate-y-1/2 right-10 group-hover:right-4 group-hover:opacity-100 opacity-0 duration-300 transition-all ease-in-out"/></span></p>
+              <Link href='/customer/dashboard' className={`group px-8 relative py-3 flex justify-center items-center gap-2 rounded-full bg-white my-2 cursor-pointer`}><span className={` font-bold font-Kanit bg-gradient-to-br from-[#e750cb] to-[#2ebde1] bg-clip-text text-transparent`}>EXPLORE</span><span><IoIosRocket className="absolute top-1/2 -translate-y-1/2 right-10 group-hover:right-4 group-hover:opacity-100 opacity-0 duration-300 transition-all ease-in-out"/></span></Link>
             </div>
           </div>
 
