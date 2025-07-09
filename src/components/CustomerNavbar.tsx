@@ -25,12 +25,12 @@ function CustomerNavbar({ pathname }: { pathname: string }) {
                 </div>
 
                 <div className={`w-auto lg:flex px-2 h-full justify-center items-center gap-5 hidden`}>
-                    <Link href='/customer/dashboard' className={`text-2xl font-light font-Kanit cursor-pointer ${pathname === '/customer/dashboard' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>Home</Link>
-                    <Link href='/about' className={`text-2xl font-light font-Kanit cursor-pointer ${pathname === '/about' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>About</Link>
-                    <Link href='/usage' className={`text-2xl font-light font-Kanit cursor-pointer ${pathname === '/usage' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>Usage</Link>
-                    <Link href='/privacy' className={`text-2xl font-light font-Kanit cursor-pointer ${pathname === '/privacy' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>Privacy</Link>
-                    <Link href='/customer/wishlist' className={`text-2xl font-light font-Kanit cursor-pointer ${pathname === '/customer/wishlist' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>Wishlist</Link>
-                    <Link href='/customer/settings' className={`text-2xl font-light font-Kanit cursor-pointer ${pathname === '/customer/settings' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>Settings</Link>
+                    <Link href='/customer/dashboard' className={`text-xl font-light font-Kanit cursor-pointer ${pathname === '/customer/dashboard' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>Home</Link>
+                    <Link href='/about' className={`text-xl font-light font-Kanit cursor-pointer ${pathname === '/about' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>About</Link>
+                    <Link href='/usage' className={`text-xl font-light font-Kanit cursor-pointer ${pathname === '/usage' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>Usage</Link>
+                    <Link href='/privacy' className={`text-xl font-light font-Kanit cursor-pointer ${pathname === '/privacy' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>Privacy</Link>
+                    <Link href='/customer/wishlist' className={`text-xl font-light font-Kanit cursor-pointer ${pathname === '/customer/wishlist' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>Wishlist</Link>
+                    <Link href='/customer/settings' className={`text-xl font-light font-Kanit cursor-pointer ${pathname === '/customer/settings' ? "text-blue-600" : "text-black"} hover:scale-90 duration-200 ease-in-out`}>Settings</Link>
                 </div>
             </div>
         </>
