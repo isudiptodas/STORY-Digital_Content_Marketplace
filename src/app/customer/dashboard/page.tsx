@@ -141,10 +141,10 @@ function page() {
                     <p onClick={() => setSearchVisible(!searchVisible)} className={`w-full md:hidden flex justify-center items-center gap-2 px-4 py-2 rounded-full bg-black text-white font-Kanit font-light cursor-pointer`}>Search <IoMdSearch /></p>
                     <div className={`w-full hidden md:flex justify-center items-center relative`}>
                         <input onChange={(e) => setSearchInput(e.target.value)} type="text" className={`w-full py-3 px-5 pr-10 rounded-full bg-gray-200 text-black placeholder-zinc-400 font-Kanit outline-none`} placeholder={placeholders[index]} />
-                        <span className={`absolute top-1/2 -translate-y-1/2 right-2 px-4 py-1 rounded-full bg-blue-600 text-white cursor-pointer flex justify-center items-center gap-2`} onClick={search}>Search <IoMdSearch /></span>
+                        <span className={`absolute top-1/2 -translate-y-1/2 right-2 px-4 py-1 rounded-full bg-blue-600 text-white cursor-pointer flex justify-center items-center gap-2 hover:bg-blue-700 duration-200 ease-in-out`} onClick={search}>Search <IoMdSearch /></span>
                     </div>
-                    <p className={`w-full md:w-[20%] flex justify-center items-center gap-2 px-4 py-2 md:py-3 rounded-full bg-black text-white font-Kanit font-light cursor-pointer`}>Cart <FaShoppingCart /></p>
-                    <p onClick={() => setFilterVisible(!filterVisible)} className={`w-full active:scale-95 duration-150 ease-in-out md:w-[20%] flex justify-center items-center gap-2 px-4 py-2 md:py-3 rounded-full bg-black text-white font-Kanit font-light cursor-pointer capitalize`}>Filter <ImFilter /></p>
+                    <p className={`w-full md:w-[20%] flex justify-center items-center gap-2 px-4 py-2 md:py-3 rounded-full bg-black text-white font-Kanit font-light cursor-pointer hover:opacity-80 duration-200 ease-in-out`}>Cart <FaShoppingCart /></p>
+                    <p onClick={() => setFilterVisible(!filterVisible)} className={`w-full active:scale-95 md:w-[20%] flex justify-center items-center gap-2 px-4 py-2 md:py-3 rounded-full bg-black text-white font-Kanit font-light cursor-pointer capitalize hover:opacity-80 duration-200 ease-in-out`}>Filter <ImFilter /></p>
 
                     {/* filter options */}
                     <div className={`w-auto ${filterVisible ? "block" : "hidden"} fixed top-36 sm:top-40 md:top-48 right-5 rounded-lg bg-white capitalize shadow-2xl p-1 flex flex-col justify-start items-start z-40`}>
@@ -187,7 +187,7 @@ function page() {
 
                     <div className="overflow-x-auto flex justify-start items-start gap-3 md:gap-5 pr-4 scroll-smooth">
                         {contentCategory.map((content, index) => (
-                            <div key={index} className="w-auto capitalize cursor-pointer shrink-0 font-Kanit px-3 py-2 rounded-lg bg-gray-200 hover:bg-black hover:text-white duration-200 ease-in-out text-black text-sm md:text-lg" onClick={() => setOption(content)}>
+                            <div key={index} className={`w-auto capitalize cursor-pointer shrink-0 font-Kanit px-3 py-2 rounded-lg hover:bg-black hover:text-white duration-200 ease-in-out text-sm md:text-lg ${content === option ? "bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-200 text-black"}`} onClick={() => setOption(content)}>
                                 {content}
                             </div>
                         ))}
