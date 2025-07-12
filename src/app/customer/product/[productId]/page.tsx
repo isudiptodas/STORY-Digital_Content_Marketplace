@@ -1,12 +1,13 @@
 'use client'
 
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { IoIosCart } from "react-icons/io";
 import { FaLocationArrow } from "react-icons/fa";
 import Link from "next/link";
+import axios from "axios";
 
 function page() {
 
@@ -23,12 +24,32 @@ function page() {
         price: 3999,
         reviews: `13`
     }]);
+    const router = useRouter();
 
     useEffect(() => {
         if (params) {
             setProductId(params.productId as string);
         }
     }, [params]);
+
+    useEffect(() => {
+        const verify = async () => {
+            try {
+                const res = await axios.get(`/api/customer/auth`, {
+                    withCredentials: true
+                });
+
+                //console.log(res.data.data);
+                if (res.status !== 200) {
+                    router.push('/denied');
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        verify();
+    }, []);
 
     return (
         <>
@@ -38,7 +59,7 @@ function page() {
                     <img src="/assets/logo.png" className={`h-5 lg:h-7 hover:rotate-180 duration-200 ease-in-out cursor-pointer`} />
                 </div>
 
-                <Link href='/customer/dashboard' className={`absolute md:flex justify-center items-center gap-2 p-2 text-sm rounded-full bg-gray-300 text-black top-10 left-5 hidden cursor-pointer shadow-lg hover:bg-black hover:text-white duration-200 ease-in-out`}><IoIosArrowRoundBack className="font-bold"/></Link>
+                <Link href='/customer/dashboard' className={`absolute md:flex justify-center items-center gap-2 p-2 text-sm rounded-full bg-gray-300 text-black top-10 left-5 hidden cursor-pointer shadow-lg hover:bg-black hover:text-white duration-200 ease-in-out`}><IoIosArrowRoundBack className="font-bold" /></Link>
 
                 <div className={`w-full mt-5 md:mt-10 px-5 h-auto flex flex-col md:flex-row justify-start items-center md:items-start relative md:gap-5`}>
                     <div className={`w-full rounded-2xl h-[60vh] md:h-[70vh] overflow-hidden`}>
@@ -50,12 +71,12 @@ function page() {
                             currency: 'INR'
                         })}</p>
                         <p className={`w-full text-start font-Kanit text-3xl`}>{productData[0].name}</p>
-                        <p className={`w-full text-start font-Kanit text-sm mt-2 flex justify-start items-center gap-2`}><FaStar className={`text-yellow-500`}/>{productData[0].rating} ({productData[0].reviews}) reviews</p>
+                        <p className={`w-full text-start font-Kanit text-sm mt-2 flex justify-start items-center gap-2`}><FaStar className={`text-yellow-500`} />{productData[0].rating} ({productData[0].reviews}) reviews</p>
 
                         <p className={`w-full text-start font-Kanit text-sm mt-5 font-light`}>{productData[0].desc}</p>
                         <div className={`w-full flex justify-start items-center gap-2 mt-5`}>
                             <p className={`px-5 py-3 cursor-pointer rounded-lg bg-black text-white font-Kanit text-sm flex justify-center items-center gap-2`}>Add to Cart <IoIosCart /></p>
-                            <p className={`px-5 py-3 cursor-pointer rounded-lg bg-blue-500 text-white font-Kanit text-sm flex justify-center items-center gap-2`}>Buy Now <FaLocationArrow  /></p>
+                            <p className={`px-5 py-3 cursor-pointer rounded-lg bg-blue-500 text-white font-Kanit text-sm flex justify-center items-center gap-2`}>Buy Now <FaLocationArrow /></p>
                         </div>
                         <div className={`w-full flex flex-col justify-start items-start`}>
 
