@@ -13,6 +13,7 @@ import { FaHeart } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { toast } from "sonner";
+import axios from "axios";
 
 interface productProp {
     id: number,
@@ -51,7 +52,26 @@ function page() {
         'price (high to low)',
         'rating (low to high)',
         'rating (high to low)',
-    ]
+    ];
+
+    useEffect(() => {
+        const verify = async () => {
+            try {
+                const res = await axios.get(`/api/customer/auth`, {
+                    withCredentials: true
+                });
+
+                //console.log(res.data.data);
+                if(res.status !== 200){
+                    router.push('/denied');
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        verify();
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
