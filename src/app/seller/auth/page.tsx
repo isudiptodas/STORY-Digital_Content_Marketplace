@@ -5,22 +5,86 @@ import { useState } from "react"
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
-import { FaCaretDown } from "react-icons/fa";
-import { professionList } from "@/data/profession";
+import { toast } from "sonner";
+import axios from "axios";
 
 function page() {
 
     const [option, setOption] = useState('register');
     const [visible, setVisible] = useState(false);
-    const[name, setName] = useState('');
-    const[email, setEmail] = useState('');
-    const[location, setLocation] = useState('');
-    const[password, setPassword] = useState('');
-    const[confirm, setConfirm] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [location, setLocation] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirm, setConfirm] = useState('');
     const router = useRouter();
+    const[loading, setLoading] = useState(false);
 
     const navigate = () => {
         router.push('/');
+    }
+
+    const register = async () => {
+        if (!email || !name || !password || !confirm || !location) {
+            toast.error("All fields are required");
+            return;
+        }
+
+        if (confirm !== password) {
+            toast.error("Passwords do not match");
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const res = await axios.post(`/api/seller/auth`, {
+                name, email, password, location, type: 'register'
+            });
+            if (res.status === 200) {
+                setLoading(false);
+            }
+        } catch (err: any) {
+            if (err?.response && err?.response?.data?.message) {
+                toast.error(err.response.data.message);
+            }
+            console.log(err);
+        }
+        finally {
+            setLoading(false);
+            setName('');
+            setEmail('');
+            setPassword('');
+            setLocation('');
+            setConfirm('');
+        }
+    }
+
+    const login = async () => {
+        if (!email || !password) {
+            toast.error("Empty fields not allowed");
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const res = await axios.post(`/api/seller/auth`, {
+                email, password, type: 'login'
+            });
+            if (res.status === 200) {
+                setLoading(false);
+                router.push('/seller/dashboard');
+            }
+        } catch (err: any) {
+            if (err?.response && err?.response?.data?.message) {
+                toast.error(err.response.data.message);
+            }
+            console.log(err);
+        }
+        finally {
+            setLoading(false);
+            setEmail('');
+            setPassword('');
+        }
     }
 
     return (
@@ -56,8 +120,8 @@ function page() {
                                 <input value={confirm} onChange={(e) => setConfirm(e.target.value)} type={visible ? "text" : "password"} placeholder="Re-type password" className="w-full px-3 py-3 border-b-[1px] border-gray-500 outline-none font-Kanit" />
                                 <span onClick={() => setVisible(!visible)} className={`absolute top-1/2 right-5 -translate-y-1/2 opacity-40 cursor-pointer`}>{visible ? <FaRegEye /> : <FaRegEyeSlash />}</span>
                             </div>
-                            
-                            <p className={`w-full rounded-full py-2 text-center bg-black text-white font-Kanit cursor-pointer`}>Submit</p>
+
+                            <p className={`w-full rounded-full py-2 text-center bg-black text-white font-Kanit cursor-pointer`} onClick={register}>{loading ? "Processing" : "Submit"}</p>
                         </div>
 
                         <div className={`w-full mt-10 ${option === 'login' ? "block" : "hidden"} h-full overflow-y-auto flex flex-col justify-start items-center gap-3`}>
@@ -66,7 +130,7 @@ function page() {
                                 <input value={password} onChange={(e) => setPassword(e.target.value)} type={visible ? "text" : "password"} placeholder="Enter password" className="w-full px-3 py-3 border-b-[1px] border-gray-500 outline-none font-Kanit" />
                                 <span onClick={() => setVisible(!visible)} className={`absolute top-1/2 right-5 -translate-y-1/2 opacity-40 cursor-pointer`}>{visible ? <FaRegEye /> : <FaRegEyeSlash />}</span>
                             </div>
-                            <p className={`w-full rounded-full py-2 text-center bg-black text-white font-Kanit cursor-pointer`}>Continue</p>
+                            <p className={`w-full rounded-full py-2 text-center bg-black text-white font-Kanit cursor-pointer`} onClick={login}>{loading ? "Processing" : "Continue"}</p>
                         </div>
                     </div>
                 </div>
