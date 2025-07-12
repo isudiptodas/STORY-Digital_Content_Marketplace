@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@neondatabase/serverless": "^1.0.1",
+    "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
+    "drizzle-kit": "^0.31.4",
+    "drizzle-orm": "^0.44.2",
     "gsap": "^3.13.0",
     "jose": "^6.0.11",
     "jsonwebtoken": "^9.0.2",
@@ -23,6 +27,8 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-collapse": "^5.0.4",
