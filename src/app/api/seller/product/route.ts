@@ -81,3 +81,20 @@ export async function GET(req: NextRequest) {
         }, { status: 500 });
     }
 }
+
+export async function DELETE(req: NextRequest) {
+    const id = Number(req.url.split('=')[1]);
+
+    try {
+        const found = await db.delete(Product).where(eq(Product.id, id));
+        return NextResponse.json({
+            success: true,
+            message: 'Product unlisted',
+        }, { status: 201 });
+    } catch (err) {
+        return NextResponse.json({
+            success: false,
+            message: 'Something went wrong',
+        }, { status: 500 });
+    }
+}

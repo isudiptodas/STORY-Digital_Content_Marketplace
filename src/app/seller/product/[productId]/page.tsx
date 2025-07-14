@@ -85,7 +85,7 @@ function page() {
                     <img src="/assets/logo.png" className={`h-5 lg:h-7 hover:rotate-180 duration-200 ease-in-out cursor-pointer`} />
                 </div>
 
-                <Link href='/seller/dashboard' className={`absolute md:flex justify-center items-center gap-2 p-2 text-sm rounded-full bg-gray-300 text-black top-10 left-5 hidden cursor-pointer shadow-lg hover:bg-black hover:text-white duration-200 ease-in-out`}><IoIosArrowRoundBack className="font-bold" /></Link>
+                <Link href='/seller/all-list' className={`absolute md:flex justify-center items-center gap-2 p-2 text-sm rounded-full bg-gray-300 text-black top-10 left-5 hidden cursor-pointer shadow-lg hover:bg-black hover:text-white duration-200 ease-in-out`}><IoIosArrowRoundBack className="font-bold" /></Link>
 
                 <div className={`w-full mt-5 md:mt-10 px-5 h-auto flex flex-col md:flex-row justify-start items-center md:items-start relative md:gap-5`}>
                     <div className={`w-full rounded-2xl h-[60vh] md:h-[70vh] overflow-hidden`}>
