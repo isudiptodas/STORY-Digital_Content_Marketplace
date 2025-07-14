@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server'
-import * as jose from 'jose';
+import {jwtVerify} from 'jose';
 
 export async function middleware(req: NextRequest) {
     const token = req.cookies.get('token')?.value;
@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/denied', req.url));
     }
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const { payload } = await jose.jwtVerify(token as string, secret);
+    const { payload } = await jwtVerify(token as string, secret);
 
     //console.log(req.nextUrl.pathname);
     const path = req.nextUrl.pathname;

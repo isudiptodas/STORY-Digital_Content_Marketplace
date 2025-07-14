@@ -8,6 +8,7 @@ import { IoCloudUploadOutline } from "react-icons/io5";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { contentCategory } from "@/data/contentCategory";
 import { toast } from "sonner";
+import { supabase } from "@/config/supabase";
 
 function page() {
 
@@ -19,6 +20,7 @@ function page() {
   const [category, setCategory] = useState('select');
   const [image, setImage] = useState<File | null>(null);
   const router = useRouter();
+  const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     const verify = async () => {
@@ -40,20 +42,59 @@ function page() {
   }, []);
 
   const addProduct = async () => {
-    if(!name || !desc || !price){
+
+    if (!name || !desc || !price) {
       toast.error("All fields are required");
       return;
     }
 
-    if(category === 'category'){
+    if (category === 'category') {
       toast.error("Please select category");
       return;
     }
 
+    if (image === null) {
+      toast.error("Please select an image");
+      return;
+    }
+
+    const filename = `products/${image.name}`;
+
     try {
-      
-    } catch (err) {
-      
+      setProcessing(true);
+      const { data, error } = await supabase.storage.from('story').upload(filename, image, {
+        upsert: true
+      });
+      if (data) {
+        const { data } = supabase.storage.from('story').getPublicUrl(filename);
+        if (data) {
+          const res = await axios.post(`/api/seller/product`, {
+            name, desc, image: data.publicUrl, category, imagePath: filename, price
+          }, { withCredentials: true });
+
+          if (res.status === 200) {
+            setProcessing(false);
+            toast.success("Product listed");
+            setTimeout(() => {
+              router.push('/seller/dashboard');
+            }, 2000);
+          }
+        }
+      }
+      if (error) {
+        console.log(error);
+      }
+    } catch (err: any) {
+      console.log(err);
+      if(err.response && err.response.data){
+        toast.error(err.response.data.message);
+      }
+      else{
+        toast.error("Something went wrong");
+      }
+    }
+    finally {
+      setProcessing(false);
     }
   }
 
@@ -76,18 +117,18 @@ function page() {
             <p onClick={() => setImage(null)} className={`${image !== null ? "block" : "hidden"} z-30 w-auto text-center cursor-pointer py-2 px-5 mt-3 rounded-lg bg-red-500 font-Kanit text-white font-light italic text-sm`}>Remove</p>
           </div>
 
-          <input type="text" className={`w-full shrink-0 py-3 border-b-[1px] border-gray-500 outline-none placeholder-gray-700 text-black font-Kanit text-sm px-2`} placeholder="Enter product name" />
-          <textarea className={`w-full shrink-0 py-3 h-52 rounded-lg mt-4 bg-gray-200 outline-none placeholder-gray-700 text-black font-Kanit text-sm px-2`} placeholder="Enter product description" />
-          <input type='number' className={`w-full shrink-0 py-3 border-b-[1px] border-gray-500 outline-none placeholder-gray-700 text-black font-Kanit text-sm px-2 mt-2`} placeholder="Enter product price in INR" />
+          <input onChange={(e) => setName(e.target.value)} type="text" className={`w-full shrink-0 py-3 border-b-[1px] border-gray-500 outline-none placeholder-gray-700 text-black font-Kanit text-sm px-2`} placeholder="Enter product name" />
+          <textarea onChange={(e) => setDesc(e.target.value)} className={`w-full shrink-0 py-3 h-52 rounded-lg mt-4 bg-gray-200 outline-none placeholder-gray-700 text-black font-Kanit text-sm px-2`} placeholder="Enter product description" />
+          <input onChange={(e) => setPrice(Number(e.target.value))} type='number' className={`w-full shrink-0 py-3 border-b-[1px] border-gray-500 outline-none placeholder-gray-700 text-black font-Kanit text-sm px-2 mt-2`} placeholder="Enter product price in INR" />
 
           <div className={`w-full ${visible ? "block" : "hidden"} shrink-0 mt-2 z-20 h-56 overflow-y-auto flex flex-col justify-start items-center gap-2 py-1 px-1 rounded-xl bg-gray-200 shadow-md`}>
             {contentCategory.map((category, index) => {
-              return <p key={index} className={`w-full text-start text-sm capitalize py-2 px-2 rounded-lg hover:bg-white duration-200 ease-in-out cursor-pointer`} onClick={() => {setCategory(category); setVisible(false)}}>{category}</p>
+              return <p key={index} className={`w-full text-start text-sm capitalize py-2 px-2 rounded-lg hover:bg-white duration-200 ease-in-out cursor-pointer`} onClick={() => { setCategory(category); setVisible(false) }}>{category}</p>
             })}
           </div>
 
           <p onClick={() => setVisible(!visible)} className="w-full px-5 py-2 bg-gray-200 rounded-lg mt-3 cursor-pointer font-Kanit capitalize text-start flex justify-between items-center">{category} <IoMdArrowDropdown className={`${visible ? "rotate-180" : "rotate-0"} z-10 duration-200 ease-in-out text-xl`} /></p>
-          <p className={`w-full text-center py-2 rounded-lg cursor-pointer mt-3 bg-gradient-to-r from-blue-400 to-blue-600 duration-200 ease-in-out text-white font-Kanit font-light`}>Add Product</p>
+          <p className={`w-full text-center py-2 rounded-lg cursor-pointer mt-3 bg-gradient-to-r from-blue-400 to-blue-600 duration-200 ease-in-out text-white font-Kanit font-light`} onClick={addProduct}>{processing ? "Processing" : "Add Product"}</p>
         </div>
 
       </div>
