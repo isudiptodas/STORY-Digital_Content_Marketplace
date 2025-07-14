@@ -124,7 +124,7 @@ function page() {
               <img src={prod.image} className={`h-36 w-full object-cover rounded-lg lg:rounded-xl`} />
               <h1 className={`w-full text-start pt-2 text-xl font-Kanit font-light`}>{prod.name}</h1>
               <h1 className={`w-full text-start text-sm font-Kanit font-light capitalize`}>{prod.category}</h1>
-              <h1 className={`w-full text-start text-sm font-Kanit font-light flex justify-start items-center gap-2`}><FaStar className="text-yellow-500" />{prod.rating || 4.3}</h1>
+              <h1 className={`w-full text-start text-sm font-Kanit font-light flex justify-start items-center gap-2`}><FaStar className="text-yellow-500" />{prod.rating || 0}</h1>
               <div className={`w-full flex justify-between items-center gap-2 mt-3`}>
                 <span className={`w-full py-2 rounded-lg bg-black text-white font-Kanit flex justify-center items-center gap-2 hover:opacity-85 duration-200 ease-in-out active:scale-95`} onClick={() => { navigate(prod.id) }}><IoMdInformationCircleOutline /> Info</span>
                 <span className={`w-full py-2 rounded-lg bg-red-500 text-white font-Kanit flex justify-center items-center gap-2 hover:bg-red-700 duration-200 ease-in-out active:scale-95`} onClick={() => unlistProduct(prod)}><IoMdRemoveCircle /> {processing ? "Processing" : "Unlist"}</span>

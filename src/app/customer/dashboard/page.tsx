@@ -209,12 +209,9 @@ function page() {
                                     <img src={prod.image} className={`h-full w-full object-cover`} />
                                     <div className={`w-full absolute z-20 bottom-0 bg-gradient-to-t from-black to-transparent h-[60%]`}></div>
                                     <div className={`z-20 w-full h-auto absolute bottom-2 py-2 px-3 flex flex-col justify-start items-start`}>
-                                        <p className={`w-full text-white font-Kanit text-lg font-semibold`}>{prod.price.toLocaleString('en-IN', {
-                                            style: 'currency',
-                                            currency: 'INR'
-                                        })}</p>
+                                        <p className={`w-full text-white font-Kanit text-lg font-semibold`}>₹{prod.price}</p>
                                         <p className={`w-full text-white font-Kanit text-lg`}>{prod.name}</p>
-                                        <p className={`w-full text-white font-light font-Kanit text-[10px] flex justify-start items-center gap-2`}><FaStar className={`text-yellow-400`} />{prod.rating || 4.3} ({prod.customerReviews?.length}) reviews</p>
+                                        <p className={`w-full text-white font-light font-Kanit text-[10px] flex justify-start items-center gap-2`}><FaStar className={`text-yellow-400`} />{prod.rating || 0} ({prod.customerReviews?.length} || 0) reviews</p>
                                     </div>
                                 </div>
                             })}
@@ -241,12 +238,9 @@ function page() {
                             <img src={prod.image} className={`h-full w-full object-cover`} />
                             <div className={`w-full absolute z-20 bottom-0 bg-gradient-to-t from-black to-transparent h-[60%]`}></div>
                             <div className={`z-20 w-full h-auto absolute bottom-2 py-2 px-3 flex flex-col justify-start items-start`}>
-                                <p className={`w-full text-white font-Kanit text-lg font-semibold`}>{prod.price.toLocaleString('en-IN', {
-                                    style: 'currency',
-                                    currency: 'INR'
-                                })}</p>
+                                <p className={`w-full text-white font-Kanit text-lg font-semibold`}>₹{prod.price}</p>
                                 <p className={`w-full text-white font-Kanit text-lg`}>{prod.name}</p>
-                                <p className={`w-full text-white font-light font-Kanit text-[10px] flex justify-start items-center gap-2`}><FaStar className={`text-yellow-400`} />{prod.rating || 4.1} ({prod.customerReviews?.length}) reviews</p>
+                                <p className={`w-full text-white font-light font-Kanit text-[10px] flex justify-start items-center gap-2`}><FaStar className={`text-yellow-400`} />{prod.rating || 0} ({prod.customerReviews?.length} || 0) reviews</p>
                             </div>
                         </div>
                     })}

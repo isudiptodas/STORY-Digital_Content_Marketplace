@@ -95,7 +95,7 @@ function page() {
                     <div className={`w-full h-auto md:h-[70vh] md:overflow-y-auto mt-8 md:mt-0 flex flex-col px-3 justify-start items-center`}>
                         <p className={`w-full text-start font-Kanit text-4xl font-semibold`}>₹{productData?.price}</p>
                         <p className={`w-full text-start font-Kanit text-3xl`}>{productData?.name}</p>
-                        <p className={`w-full text-start font-Kanit text-sm mt-2 flex justify-start items-center gap-2`}><FaStar className={`text-yellow-500`} />{productData?.rating || 4.7} ({productData?.customerReviews?.length}) reviews</p>
+                        <p className={`w-full text-start font-Kanit text-sm mt-2 flex justify-start items-center gap-2`}><FaStar className={`text-yellow-500`} />{productData?.rating || 0} ({productData?.customerReviews?.length} || 0) reviews</p>
 
                         <p className={`w-full text-start font-Kanit text-sm mt-5 font-light`}>{productData?.desc}</p>
                         <div className={`w-full flex justify-start items-center gap-2 mt-5`}>
