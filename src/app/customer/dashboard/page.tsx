@@ -15,15 +15,18 @@ import { GoDotFill } from "react-icons/go";
 import { toast } from "sonner";
 import axios from "axios";
 
-interface productProp {
-    id: number,
-    name: string,
-    desc: string,
-    img: string,
-    rating: number,
-    price: number,
-    reviews: string,
-    category: string
+interface product {
+  id: number,
+  name: string,
+  sellerEmail: string,
+  desc: string,
+  image: string,
+  category: string,
+  imagePath: string,
+  rating?: number,
+  customerRating?: [],
+  price: number,
+  customerReviews?: []
 }
 
 function page() {
@@ -34,7 +37,7 @@ function page() {
     const [searchVisible, setSearchVisible] = useState(false);
     const [option, setOption] = useState<null | string>(null);
     const [searchInput, setSearchInput] = useState<null | string>(null);
-    const [allProducts, setAllProducts] = useState<productProp[] | []>(productList);
+    const [allProducts, setAllProducts] = useState<product[] | []>([]);
     const [filterOption, setFilterOption] = useState('');
     const router = useRouter();
 
@@ -103,20 +106,20 @@ function page() {
                 setAllProducts(sorted);
                 //console.log(sorted);
             }
-            else if (filterOption === 'rating (low to high)') {
-                const sorted = allProducts.sort((a, b) => {
-                    return a.rating - b.rating
-                });
-                setAllProducts(sorted);
-                //console.log(sorted);
-            }
-            else if (filterOption === 'rating (high to low)') {
-                const sorted = allProducts.sort((a, b) => {
-                    return b.rating - a.rating
-                });
-                setAllProducts(sorted);
-                //console.log(sorted);
-            }
+            // else if (filterOption === 'rating (low to high)') {
+            //     const sorted = allProducts.sort((a, b) => {
+            //         return a.rating - b.rating
+            //     });
+            //     setAllProducts(sorted);
+            //     //console.log(sorted);
+            // }
+            // else if (filterOption === 'rating (high to low)') {
+            //     const sorted = allProducts.sort((a, b) => {
+            //         return b.rating - a.rating
+            //     });
+            //     setAllProducts(sorted);
+            //     //console.log(sorted);
+            // }
         }
 
         sortFilter();
@@ -125,14 +128,14 @@ function page() {
     useEffect(() => {
         const categoryFilter = () => {
             if (option !== null) {
-                const filtered = productList.filter((data) => {
+                const filtered = allProducts.filter((data) => {
                     return data.category === option
                 });
 
                 setAllProducts(filtered);
             }
             else {
-                setAllProducts(productList);
+                setAllProducts(allProducts);
             }
         }
 
@@ -145,12 +148,29 @@ function page() {
             return;
         }
 
-        const filtered = productList.filter((data) => {
+        const filtered = allProducts.filter((data) => {
             return data.name.toLowerCase().includes(searchInput.toLowerCase())
         });
 
         setAllProducts(filtered);
     }
+
+    useEffect(() => {
+        const fetchAllProduct = async () => {
+            try {
+                const res = await axios.get(`/api/customer/product?type=all`, {
+                    withCredentials: true
+                });
+
+                console.log(res.data.data);
+                setAllProducts(res.data.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        fetchAllProduct();
+    }, []);
 
     return (
         <>
@@ -186,7 +206,7 @@ function page() {
                         <div className={`w-full h-full pb-10 mt-5 overflow-y-auto flex flex-col gap-4 py-3`}>
                             {allProducts.length > 0 && allProducts.map((prod, index) => {
                                 return <div key={index} className={`w-full cursor-pointer rounded-lg lg:rounded-xl h-44 shrink-0 bg-gray-200 overflow-hidden relative z-20`} onClick={() => navigate(prod.id.toString())}>
-                                    <img src={prod.img} className={`h-full w-full object-cover`} />
+                                    <img src={prod.image} className={`h-full w-full object-cover`} />
                                     <div className={`w-full absolute z-20 bottom-0 bg-gradient-to-t from-black to-transparent h-[60%]`}></div>
                                     <div className={`z-20 w-full h-auto absolute bottom-2 py-2 px-3 flex flex-col justify-start items-start`}>
                                         <p className={`w-full text-white font-Kanit text-lg font-semibold`}>{prod.price.toLocaleString('en-IN', {
@@ -194,7 +214,7 @@ function page() {
                                             currency: 'INR'
                                         })}</p>
                                         <p className={`w-full text-white font-Kanit text-lg`}>{prod.name}</p>
-                                        <p className={`w-full text-white font-light font-Kanit text-[10px] flex justify-start items-center gap-2`}><FaStar className={`text-yellow-400`} />{prod.rating} ({prod.reviews}) reviews</p>
+                                        <p className={`w-full text-white font-light font-Kanit text-[10px] flex justify-start items-center gap-2`}><FaStar className={`text-yellow-400`} />{prod.rating || 4.3} ({prod.customerReviews?.length}) reviews</p>
                                     </div>
                                 </div>
                             })}
@@ -218,7 +238,7 @@ function page() {
                 <div className={`w-full pb-10 mt-8 lg:mt-10 px-5 lg:px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-items-center gap-3`}>
                     {allProducts.length > 0 && allProducts.map((prod, index) => {
                         return <div key={index} className={`w-full cursor-pointer rounded-lg lg:rounded-xl h-48 bg-gray-200 overflow-hidden relative z-20`} onClick={() => navigate(prod.id.toString())}>
-                            <img src={prod.img} className={`h-full w-full object-cover`} />
+                            <img src={prod.image} className={`h-full w-full object-cover`} />
                             <div className={`w-full absolute z-20 bottom-0 bg-gradient-to-t from-black to-transparent h-[60%]`}></div>
                             <div className={`z-20 w-full h-auto absolute bottom-2 py-2 px-3 flex flex-col justify-start items-start`}>
                                 <p className={`w-full text-white font-Kanit text-lg font-semibold`}>{prod.price.toLocaleString('en-IN', {
@@ -226,7 +246,7 @@ function page() {
                                     currency: 'INR'
                                 })}</p>
                                 <p className={`w-full text-white font-Kanit text-lg`}>{prod.name}</p>
-                                <p className={`w-full text-white font-light font-Kanit text-[10px] flex justify-start items-center gap-2`}><FaStar className={`text-yellow-400`} />{prod.rating} ({prod.reviews}) reviews</p>
+                                <p className={`w-full text-white font-light font-Kanit text-[10px] flex justify-start items-center gap-2`}><FaStar className={`text-yellow-400`} />{prod.rating || 4.1} ({prod.customerReviews?.length}) reviews</p>
                             </div>
                         </div>
                     })}

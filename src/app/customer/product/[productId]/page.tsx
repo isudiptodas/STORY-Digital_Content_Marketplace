@@ -9,28 +9,32 @@ import { FaLocationArrow } from "react-icons/fa";
 import Link from "next/link";
 import axios from "axios";
 
+interface product {
+  id: number,
+  name: string,
+  sellerEmail: string,
+  desc: string,
+  image: string,
+  category: string,
+  imagePath: string,
+  rating?: number,
+  customerRating?: [],
+  price: number,
+  customerReviews?: []
+}
+
 function page() {
 
     const params = useParams();
-    const [productId, setProductId] = useState<string | null>(null);
-    const [productData, setProductData] = useState([{
-        id: 1,
-        name: `Story of us`,
-        desc: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. Totam, tempore optio. Quam ut totam, doloribus sed officia recusandae commodi numquam aspernatur, atque quo repellendus modi impedit perspiciatis quidem veniam ducimus!
-          Soluta fuga facilis nisi enim eum, beatae libero ratione voluptatum doloremque! Ad omnis debitis cupiditate soluta sed esse voluptatem? Vero dolores modi delectus eos repellendus! Doloribus veritatis eligendi qui velit.
-          Quae, reiciendis atque. Deserunt veritatis labore doloribus sapiente nobis magnam sunt porro mollitia. Ex itaque dicta hic cum facilis praesentium asperiores vel vitae, consectetur, aut debitis dolores aliquam. Facere, amet.`,
-        img: `https://plus.unsplash.com/premium_photo-1722092223135-21fd4b5f9cc8?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8ZGlnaXRhbCUyMHByb2R1Y3RzfGVufDB8fDB8fHww`,
-        rating: `4.2`,
-        price: 3999,
-        reviews: `13`
-    }]);
+    const productId = params.productId as string;
+    const [productData, setProductData] = useState<product | null>(null);
     const router = useRouter();
 
-    useEffect(() => {
-        if (params) {
-            setProductId(params.productId as string);
-        }
-    }, [params]);
+    // useEffect(() => {
+    //     if (params) {
+    //         setProductId(params.productId as string);
+    //     }
+    // }, [params]);
 
     useEffect(() => {
         const verify = async () => {
@@ -51,6 +55,29 @@ function page() {
         verify();
     }, []);
 
+    useEffect(() => {
+        if(!productId){
+            return;
+        }
+
+        const fetchProductData = async () => {
+            console.log(productId);
+            try {
+                const res = await axios.get(`/api/customer/product?id=${productId}`, {
+                    withCredentials: true
+                });
+
+                console.log(res.data.data);
+                setProductData(res.data.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        fetchProductData();
+
+    }, [productId]);
+
     return (
         <>
             <div className={`w-full h-auto overflow-hidden pb-10 relative flex flex-col justify-start items-center`}>
@@ -63,17 +90,14 @@ function page() {
 
                 <div className={`w-full mt-5 md:mt-10 px-5 h-auto flex flex-col md:flex-row justify-start items-center md:items-start relative md:gap-5`}>
                     <div className={`w-full rounded-2xl h-[60vh] md:h-[70vh] overflow-hidden`}>
-                        <img src={productData[0].img} className={`w-full h-full object-cover`} />
+                        <img src={productData?.image} className={`w-full h-full object-cover`} />
                     </div>
                     <div className={`w-full h-auto md:h-[70vh] md:overflow-y-auto mt-8 md:mt-0 flex flex-col px-3 justify-start items-center`}>
-                        <p className={`w-full text-start font-Kanit text-4xl font-semibold`}>{productData[0].price.toLocaleString('en-IN', {
-                            style: 'currency',
-                            currency: 'INR'
-                        })}</p>
-                        <p className={`w-full text-start font-Kanit text-3xl`}>{productData[0].name}</p>
-                        <p className={`w-full text-start font-Kanit text-sm mt-2 flex justify-start items-center gap-2`}><FaStar className={`text-yellow-500`} />{productData[0].rating} ({productData[0].reviews}) reviews</p>
+                        <p className={`w-full text-start font-Kanit text-4xl font-semibold`}>₹{productData?.price}</p>
+                        <p className={`w-full text-start font-Kanit text-3xl`}>{productData?.name}</p>
+                        <p className={`w-full text-start font-Kanit text-sm mt-2 flex justify-start items-center gap-2`}><FaStar className={`text-yellow-500`} />{productData?.rating || 4.7} ({productData?.customerReviews?.length}) reviews</p>
 
-                        <p className={`w-full text-start font-Kanit text-sm mt-5 font-light`}>{productData[0].desc}</p>
+                        <p className={`w-full text-start font-Kanit text-sm mt-5 font-light`}>{productData?.desc}</p>
                         <div className={`w-full flex justify-start items-center gap-2 mt-5`}>
                             <p className={`px-5 py-3 cursor-pointer rounded-lg bg-black text-white font-Kanit text-sm flex justify-center items-center gap-2`}>Add to Cart <IoIosCart /></p>
                             <p className={`px-5 py-3 cursor-pointer rounded-lg bg-blue-500 text-white font-Kanit text-sm flex justify-center items-center gap-2`}>Buy Now <FaLocationArrow /></p>

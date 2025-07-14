@@ -27,17 +27,21 @@ interface product {
 function page() {
 
     const params = useParams();
-    const [productId, setProductId] = useState<string | null>(null);
+    const productId = params.productId as string;
     const [productData, setProductData] = useState<product | null>(null) 
     const router = useRouter();
 
-    useEffect(() => {
-        if (params) {
-            setProductId(params.productId as string);
-        }
-    }, [params]);
+    // useEffect(() => {
+    //     if (params) {
+    //         setProductId(params.productId as string);
+    //     }
+    // }, [params]);
 
     useEffect(() => {
+        if(!productId){
+            return;
+        }
+
         const fetchProductData = async () => {
             try {
                 const res = await axios.get(`/api/seller/product?type=prod&id=${productId} `, {
@@ -92,18 +96,12 @@ function page() {
                         <img src={productData?.image} className={`w-full h-full object-cover`} />
                     </div>
                     <div className={`w-full h-auto md:h-[70vh] md:overflow-y-auto mt-8 md:mt-0 flex flex-col px-3 justify-start items-center`}>
-                        <p className={`w-full text-start font-Kanit text-4xl font-semibold`}>{productData?.price.toLocaleString('en-IN', {
-                            style: 'currency',
-                            currency: 'INR'
-                        })}</p>
+                        <p className={`w-full text-start font-Kanit text-4xl font-semibold`}>₹{productData?.price}</p>
                         <p className={`w-full text-start font-Kanit text-3xl`}>{productData?.name}</p>
                         <p className={`w-full text-start font-Kanit text-sm mt-2 flex justify-start items-center gap-2`}><FaStar className={`text-yellow-500`} />{productData?.rating || 4.2} (12) reviews</p>
 
                         <p className={`w-full text-start font-Kanit text-sm mt-5 font-light`}>{productData?.desc}</p>
-                        <div className={`w-full flex justify-start items-center gap-2 mt-5`}>
-                            <p className={`px-5 py-3 cursor-pointer rounded-lg bg-black text-white font-Kanit text-sm flex justify-center items-center gap-2`}>Add to Cart <IoIosCart /></p>
-                            <p className={`px-5 py-3 cursor-pointer rounded-lg bg-blue-500 text-white font-Kanit text-sm flex justify-center items-center gap-2`}>Buy Now <FaLocationArrow /></p>
-                        </div>
+                       
                         <div className={`w-full flex flex-col justify-start items-start`}>
 
                         </div>
