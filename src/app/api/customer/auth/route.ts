@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { Customer, Seller } from "@/schema/schema";
 import { eq } from "drizzle-orm";
 import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -60,12 +61,12 @@ export async function POST(req: NextRequest) {
                 }, { status: 401 });
             }
 
-            const token = jwt.sign({role: 'customer', id: found[0].id, email: found[0].email }, process.env.JWT_SECRET as string, { expiresIn: '1d' });
+            const token = jwt.sign({ role: 'customer', id: found[0].id, email: found[0].email }, process.env.JWT_SECRET as string, { expiresIn: '1d' });
 
             const res = NextResponse.json({
                 success: true,
                 message: 'login successful',
-            }, {status : 200});
+            }, { status: 200 });
 
             res.cookies.set('token', token, {
                 httpOnly: true,
@@ -84,15 +85,19 @@ export async function POST(req: NextRequest) {
     }
 }
 
-export async function GET(req: NextRequest){
+export async function GET(req: NextRequest) {
 
-    const userId = req.headers.get('user-id');
-    const userRole = req.headers.get('user-role');
-    const userEmail = req.headers.get('user-email');
+    // const userId = req.headers.get('user-id');
+    // const userRole = req.headers.get('user-role');
+    const token = req.cookies.get('token')?.value;
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    const { payload } = await jwtVerify(token as string, secret);
+
+    const userEmail = payload.email;
 
     const customerFound = await db.select().from(Customer).where(eq(Customer.email, userEmail as string));
     return NextResponse.json({
         success: true,
         data: customerFound[0]
-    }, {status: 200});
+    }, { status: 200 });
 }

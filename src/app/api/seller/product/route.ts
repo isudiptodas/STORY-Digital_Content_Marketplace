@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { Product } from "@/schema/schema";
 import { db } from "@/config/db";
 import { eq } from "drizzle-orm";
+import { jwtVerify } from 'jose';
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
 
     const { name, desc, image, category, imagePath, price } = body;
-    const sellerEmail = req.headers.get('user-email') as string;
+    const token = req.cookies.get('token')?.value;
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    const { payload } = await jwtVerify(token as string, secret);
+
+    const sellerEmail = payload.email as string;
 
     try {
         const res = await db.insert(Product).values({ name, desc, image, category, imagePath, price, sellerEmail });
@@ -32,20 +37,47 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-    const sellerEmail = req.headers.get('user-email') as string;
+    const token = req.cookies.get('token')?.value;
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    const { payload } = await jwtVerify(token as string, secret);
 
-    try {
-        const found = await db.select().from(Product).where(eq(Product.sellerEmail, sellerEmail));
-        return NextResponse.json({
-            success: true,
-            message: 'All products fetched',
-            data: found
-        }, { status: 200 });
-    } catch (err) {
-        console.log(err);
+    const sellerEmail = payload.email as string;
+    const type = req.url.split('=')[1];
+
+    if (type === 'all') {
+        try {
+            const found = await db.select().from(Product).where(eq(Product.sellerEmail, sellerEmail));
+            return NextResponse.json({
+                success: true,
+                message: 'All products fetched',
+                data: found
+            }, { status: 200 });
+        } catch (err) {
+            console.log(err);
+            return NextResponse.json({
+                success: false,
+                message: 'Internal Server Error'
+            }, { status: 500 });
+        }
+    }
+    else {
+        const id = Number(req.url.split('id=')[1]);
+
+        if (id !== null) {
+            const found = await db.select().from(Product).where(eq(Product.id, id));
+
+            if (found.length > 0) {
+                return NextResponse.json({
+                    success: true,
+                    message: 'Product fetched',
+                    data: found[0]
+                }, { status: 200 });
+            }
+        }
+
         return NextResponse.json({
             success: false,
-            message: 'Internal Server Error'
+            message: 'Something went wrong',
         }, { status: 500 });
     }
 }
