@@ -25,8 +25,20 @@ export const Product = pgTable("product", {
   image: text().notNull(),
   category: text().notNull(),
   imagePath: text().notNull(),
-  rating: numeric({precision: 2, scale: 1}),
+  rating: numeric({ precision: 2, scale: 1 }),
   customerRating: integer().array(),
   price: integer().notNull(),
   customerReviews: jsonb().array()
 });
+
+export const Wishlist = pgTable("wishlist", {
+  id: serial("id").primaryKey(),
+  name: text().notNull(),
+  userEmail: text().notNull(),
+  image: text().notNull(),
+  category: text().notNull(),
+  rating: numeric({ precision: 2, scale: 1 }),
+  customerRating: integer().array(),
+  price: integer().notNull(),
+});
+

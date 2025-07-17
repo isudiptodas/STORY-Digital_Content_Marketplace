@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     const type = req.url.split('=')[1];
+    console.log(type);
 
     if (type === 'all') {
         try {
@@ -21,6 +22,25 @@ export async function GET(req: NextRequest) {
                 message: `Something went wrong`,
             }, { status: 500 });
         }
+    }
+    else if (type === 'wish&email') {
+        const email = req.url.split('email=')[1];
+
+        try {
+            //const found = await db.select().from(Wishlist).where(eq(Wishlist.userEmail, email));
+
+            return NextResponse.json({
+                success: true,
+                message: `Wishlist fetched`,
+                //data: found[0]
+            }, { status: 200 });
+        } catch (err) {
+            return NextResponse.json({
+                success: false,
+                message: `Something went wrong`,
+            }, { status: 500 });
+        }
+
     }
     else {
         const id = Number(req.url.split('=')[1]);

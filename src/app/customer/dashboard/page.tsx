@@ -162,7 +162,7 @@ function page() {
                     withCredentials: true
                 });
 
-                console.log(res.data.data);
+                //console.log(res.data.data);
                 setAllProducts(res.data.data);
             } catch (err) {
                 console.log(err);

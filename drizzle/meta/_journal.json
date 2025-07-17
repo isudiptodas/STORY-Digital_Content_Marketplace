@@ -43,6 +43,34 @@
       "when": 1752495583530,
       "tag": "0005_aberrant_satana",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1752763179559,
+      "tag": "0006_tidy_mattie_franklin",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1752763392355,
+      "tag": "0007_old_hellfire_club",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1752763573838,
+      "tag": "0008_handy_quasar",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1752763946647,
+      "tag": "0009_glamorous_frank_castle",
+      "breakpoints": true
     }
   ]
 }
